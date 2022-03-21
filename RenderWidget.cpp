@@ -4,122 +4,76 @@
 // This software can be used and/or modified for academich use as long as 
 // this commented part is listed
 //
-// Last modified by: Zein Salah, on 24.02.2021
+// Last modified by: Zein Salah, on 26.02.2019
 //
 
 
 #include "RenderWidget.h"
+#include <glut.h>
 #include <QPainter>
 
-RenderWidget::RenderWidget(QWidget *parent) : QWidget(parent)
+RenderWidget::RenderWidget(QWidget *parent) : QOpenGLWidget(parent)
 {
-  // to be implemeted later
+
 }
+
+
+RenderWidget::~RenderWidget()
+{
+
+}
+
 
 QSize RenderWidget::minimumSizeHint() const
 {
-  return QSize(100, 100);
+    return QSize(100, 100);
 }
+
 
 QSize RenderWidget::sizeHint() const
 {
-  return QSize(600, 600);
+    return QSize(600, 600);
 }
 
-void RenderWidget::paintEvent(QPaintEvent *)
+
+void RenderWidget::initializeGL()
 {
-  QPainter painter(this);
+    glClearColor(1.0, 1.0, 1.0, 0.0);
+    glMatrixMode(GL_PROJECTION);
+    gluOrtho2D(0.0, 600.0, 0.0, 600.0);
 
- //    painter.setRenderHint(QPainter::Antialiasing, false);
-  QColor color(0, 0, 0);
-  painter.setPen(color);
+    //glOrtho(-2.0, 2.0, -2.0, 2.0, -100, 100);
+    //gluPerspective(25.0, 1.0, 1.0, 100.0);
 
-  painter.drawRect(QRect(0, 0, width() - 1, height() - 1));
-  
-  //for (int x = 100; x < 300; ++x)
-  //{
-  //  painter.drawPoint(x, x);
-  //}
-
-  //myDrawLine(50, 70, 500, 370);
-
-  drawTicks(300, 300, 200);
 }
 
 
-void RenderWidget::myDrawLine(float x1, float y1, float x2, float y2)
+void RenderWidget::paintGL()
 {
-  QPainter painter(this);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  //    painter.setRenderHint(QPainter::Antialiasing, false);
-  QColor color(255, 0, 0);
-  painter.setPen(color);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glLineWidth(3);
+    
+    glBegin(GL_TRIANGLES);
+      glColor3f(1.0, 0.0, 0.0);   // red
+      glVertex2f(100, 100);
+      glColor3f(0.0, 1.0, 0.0);   // green
+      glVertex2f(400, 100);
+	  glColor3f(0.0, 0.0, 1.0);   // blue
+      glVertex2f(250, 400);
+    glEnd();
 
-  float m = (y2 - y1) / (x2 - x1);
-  //  SetPixel(x1, y1, color);   // first point
-  painter.drawPoint(x1, y1);
-
-  if (m < 1)
-  {
-    float y = y1;
-    for (int i = x1 + 1; i < x2; ++i)
-    {
-      y = y + m;
-      //      SetPixel(i, round(y), color);
-      painter.drawPoint(i, round(y));
-    }
-  }
-  else     // i.e., m > 1
-  {
-    float mm = 1 / m;
-    float x = x1;
-    for (int i = y1 + 1; i < y2; ++i)
-    {
-      x = x + mm;
-      //      SetPixel(round(x), i, color);
-      painter.drawPoint(round(x), i);
-    }
-  }
-
-  //  SetPixel(x2, y2, color);   // last point
-  painter.drawPoint(x2, y2);
+    glFlush();
 }
 
 
-void RenderWidget::drawTicks(float xc, float yc, float r)
+void RenderWidget::resizeGL(int width, int height)
 {
-  QPainter painter(this);
+    int side = qMin(width, height);
+    glViewport((width - side) / 2, (height - side) / 2, side, side);
 
-  //    painter.setRenderHint(QPainter::Antialiasing, false);
-  QColor color(0, 0, 0);
-  painter.setPen(color);
-
-  float PI = 3.14159;
-  
-  for (int m =0; m<60; ++m)
-  {
-    float theta = m * 6 * PI / 180;
-
-    float x1 = xc + r * cos(theta);
-    float y1 = yc + r * sin(theta);
-
-    float x2, y2;
-    if (m % 5 == 0)
-    {
-      x2 = xc + r * 0.9 * cos(theta);
-      y2 = yc + r * 0.9 * sin(theta);
-    }
-    else
-    {
-      x2 = xc + r * 0.95 * cos(theta);
-      y2 = yc + r * 0.95 * sin(theta);
-    }
-
-    painter.drawLine(round(x1), round(y1), round(x2), round(y2));
-     
-  }
-
-
-  
-
+//    glViewport(0, 0, width, height);
 }
+
+
