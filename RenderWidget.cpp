@@ -11,10 +11,13 @@
 #include "RenderWidget.h"
 #include <glut.h>
 #include <QPainter>
+#include <iostream>
 
 RenderWidget::RenderWidget(QWidget* parent) : QOpenGLWidget(parent)
 {
-
+  m_ViewPoint.x = 5.0;
+  m_ViewPoint.y = 5.0;
+  m_ViewPoint.z = 5.0;
 }
 
 
@@ -42,12 +45,6 @@ void RenderWidget::initializeGL()
 
   glMatrixMode(GL_PROJECTION);
   gluPerspective(15.0, 1.0, 1.0, 100.0);
-
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  gluLookAt(5.0, 5.0, 5.0,      /* view point */
-    0.0, 0.0, 0.0,      /* ref point */
-    0.0, 1.0, 0.0);      /* up direction is positive y-axis */
 }
 
 
@@ -56,8 +53,13 @@ void RenderWidget::paintGL()
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
 
-  drawCube();
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  gluLookAt(m_ViewPoint.x, m_ViewPoint.y, m_ViewPoint.z,      /* view point */
+            0.0, 0.0, 0.0,      /* ref point */
+            0.0, 1.0, 0.0);     /* up direction is positive y-axis */
 
+  drawCube();
 }
 
 
@@ -67,6 +69,30 @@ void RenderWidget::resizeGL(int width, int height)
   glViewport((width - side) / 2, (height - side) / 2, side, side);
 
   //  glViewport(0, 0, width, height);
+}
+
+
+void RenderWidget::zoomIn()
+{
+  std::cout << "Zooming In..\n";
+
+  m_ViewPoint.x *= 0.95;
+  m_ViewPoint.y *= 0.95;
+  m_ViewPoint.z *= 0.95;
+
+  update();
+}
+
+
+void RenderWidget::zoomOut()
+{
+  std::cout << "Zooming Out..\n";
+
+  m_ViewPoint.x /= 0.95;
+  m_ViewPoint.y /= 0.95;
+  m_ViewPoint.z /= 0.95;
+
+  update();
 }
 
 

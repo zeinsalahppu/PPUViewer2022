@@ -11,6 +11,7 @@
 #pragma once
 
 #include <QWidget>
+#include <QPushButton>
 
 class RenderWidget;
 
@@ -23,6 +24,8 @@ public:
 
 private:
   RenderWidget *m_RenderWidget;
+  QPushButton* m_ZoomInButton;
+  QPushButton* m_ZoomOutButton;
 
 };
 

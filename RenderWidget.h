@@ -26,12 +26,23 @@ public:
 	QSize minimumSizeHint() const override;
 	QSize sizeHint() const override;
 
-protected:
-	void initializeGL() override;
-	void resizeGL(int w, int h) override;
-	void paintGL() override;
+protected slots:
+  void zoomIn();
+  void zoomOut();
 
-	void drawCube(void);
+protected:
+  void initializeGL() override;
+  void resizeGL(int w, int h) override;
+  void paintGL() override;
+
+  void drawCube(void);
+
+  typedef struct
+  {
+    double x, y, z;
+  } Point3D;
+
+  Point3D m_ViewPoint;
 
 };
 
