@@ -26,6 +26,7 @@ private:
   RenderWidget *m_RenderWidget;
   QPushButton* m_ZoomInButton;
   QPushButton* m_ZoomOutButton;
+  QPushButton* m_RotateButton;
 
 };
 
