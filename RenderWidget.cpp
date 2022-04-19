@@ -4,7 +4,7 @@
 // This software can be used and/or modified for academich use as long as 
 // this commented part is listed
 //
-// Last modified by: Zein Salah, on 26.02.2019
+// Last modified by: Zein Salah, on 26.02.2022
 //
 
 
@@ -60,7 +60,7 @@ void RenderWidget::paintGL()
       glVertex2f(100, 100);
       glColor3f(0.0, 1.0, 0.0);   // green
       glVertex2f(400, 100);
-	  glColor3f(0.0, 0.0, 1.0);   // blue
+	    glColor3f(0.0, 0.0, 1.0);   // blue
       glVertex2f(250, 400);
     glEnd();
 
@@ -71,9 +71,9 @@ void RenderWidget::paintGL()
 void RenderWidget::resizeGL(int width, int height)
 {
     int side = qMin(width, height);
-    glViewport((width - side) / 2, (height - side) / 2, side, side);
+ //   glViewport((width - side) / 2, (height - side) / 2, side, side);
 
-//    glViewport(0, 0, width, height);
+    glViewport(0, 0, width, height);
 }
 
 
