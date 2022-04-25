@@ -41,20 +41,22 @@ void RenderWidget::initializeGL()
   glClearColor(1.0, 1.0, 1.0, 0.0);
 
   glMatrixMode(GL_PROJECTION);
-  gluPerspective(15.0, 1.0, 1.0, 100.0);
+  glLoadIdentity();
+  //gluPerspective(30.0, 1.0, 1.0, 100.0);
+  glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 10000.0);
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  gluLookAt(5.0, 5.0, 5.0,      /* view point */
-    0.0, 0.0, 0.0,      /* ref point */
-    0.0, 1.0, 0.0);      /* up direction is positive y-axis */
+  gluLookAt(0.0, 0.0, 5.0,      /* view point */
+            0.0, 0.0, 0.0,      /* ref point */
+            0.0, 1.0, 0.0);     /* up direction is positive y-axis */
 }
 
 
 void RenderWidget::paintGL()
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glEnable(GL_DEPTH_TEST);
+  //glEnable(GL_DEPTH_TEST);
 
   drawCube();
 
@@ -83,7 +85,7 @@ void RenderWidget::drawCube(void)
   cubeCorner[6][0] = 0.5;   cubeCorner[6][1] = 0.5;   cubeCorner[6][2] = 0.5;
   cubeCorner[7][0] = -0.5;  cubeCorner[7][1] = 0.5;   cubeCorner[7][2] = 0.5;
 
-  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   glLineWidth(3);
   glBegin(GL_QUADS);
 
