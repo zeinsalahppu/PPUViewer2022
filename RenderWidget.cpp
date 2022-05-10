@@ -1,10 +1,10 @@
 //
-// copyright 2018 Palestine Polytechnic Univeristy
+// Copyright 2022 Palestine Polytechnic Univeristy
 //
-// This software can be used and/or modified for academich use as long as 
+// This software can be used and/or modified for academic use as long as 
 // this commented part is listed
 //
-// Last modified by: Zein Salah, on 26.02.2022
+// Last modified by: Zein Salah, on 10.05.2022
 //
 
 
@@ -12,6 +12,7 @@
 #include <glut.h>
 #include <QPainter>
 #include <iostream>
+
 
 RenderWidget::RenderWidget(QWidget* parent) : QOpenGLWidget(parent)
 {
@@ -45,6 +46,20 @@ void RenderWidget::initializeGL()
 
   glMatrixMode(GL_PROJECTION);
   gluPerspective(15.0, 1.0, 1.0, 100.0);
+
+  GLfloat light_position[] = { 10.0, 10.0, 10.0, 0.0 };
+
+  GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+  GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+  GLfloat light_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+
+  glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+  glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+  glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+  glEnable(GL_LIGHTING);
+  glEnable(GL_LIGHT0);
+
 }
 
 
@@ -112,6 +127,19 @@ void RenderWidget::rotateAboutY()
 }
 
 
+void RenderWidget::normalize(GLfloat vec[3])
+{
+  double epsilon = 1e-6;
+  double n = sqrt(vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2]);
+
+  if (n >= epsilon)
+  {
+    for (int i = 0; i < 3; ++i)
+      vec[i] /= n;
+  }
+}
+
+
 void RenderWidget::drawCube(void)
 {
   GLfloat cubeCorner[8][3];
@@ -125,44 +153,81 @@ void RenderWidget::drawCube(void)
   cubeCorner[6][0] = 0.5;   cubeCorner[6][1] = 0.5;   cubeCorner[6][2] = 0.5;
   cubeCorner[7][0] = -0.5;  cubeCorner[7][1] = 0.5;   cubeCorner[7][2] = 0.5;
 
+  for (int i = 0; i < 8; ++i)
+    normalize(cubeCorner[i]);
+
+  GLfloat mat_ambient[] = { 0.33, 0.22, 0.03, 1.0 };
+  GLfloat mat_diffuse[] = { 0.78, 0.57, 0.11, 1.0 };
+  GLfloat mat_specular[] = { 0.99, 0.94, 0.81, 1.0 };
+  GLfloat mat_shininess[] = { 28.0 };
+
+  glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_ambient);
+  glMaterialfv(GL_FRONT, GL_AMBIENT, mat_diffuse);
+  glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+  glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   glLineWidth(3);
   glBegin(GL_QUADS);
 
   glColor3f(0.0, 0.0, 0.0);   // blue
+  glNormal3fv(cubeCorner[3]);
   glVertex3fv(cubeCorner[3]);
+  glNormal3fv(cubeCorner[2]);
   glVertex3fv(cubeCorner[2]);
+  glNormal3fv(cubeCorner[1]);
   glVertex3fv(cubeCorner[1]);
+  glNormal3fv(cubeCorner[0]);
   glVertex3fv(cubeCorner[0]);
 
   glColor3f(1.0, 1.0, 0.0);  // yellow
+  glNormal3fv(cubeCorner[1]);
   glVertex3fv(cubeCorner[1]);
+  glNormal3fv(cubeCorner[5]);
   glVertex3fv(cubeCorner[5]);
+  glNormal3fv(cubeCorner[4]);
   glVertex3fv(cubeCorner[4]);
+  glNormal3fv(cubeCorner[0]);
   glVertex3fv(cubeCorner[0]);
 
   glColor3f(0.0, 1.0, 1.0);
+  glNormal3fv(cubeCorner[3]);
   glVertex3fv(cubeCorner[3]);
+  glNormal3fv(cubeCorner[7]);
   glVertex3fv(cubeCorner[7]);
+  glNormal3fv(cubeCorner[6]);
   glVertex3fv(cubeCorner[6]);
+  glNormal3fv(cubeCorner[2]);
   glVertex3fv(cubeCorner[2]);
 
   glColor3f(1.0, 0.0, 0.0);   // red
+  glNormal3fv(cubeCorner[4]);
   glVertex3fv(cubeCorner[4]);
+  glNormal3fv(cubeCorner[5]);
   glVertex3fv(cubeCorner[5]);
+  glNormal3fv(cubeCorner[6]);
   glVertex3fv(cubeCorner[6]);
+  glNormal3fv(cubeCorner[7]);
   glVertex3fv(cubeCorner[7]);
 
   glColor3f(1.0, 0.0, 1.0);
+  glNormal3fv(cubeCorner[4]);
   glVertex3fv(cubeCorner[4]);
+  glNormal3fv(cubeCorner[7]);
   glVertex3fv(cubeCorner[7]);
+  glNormal3fv(cubeCorner[3]);
   glVertex3fv(cubeCorner[3]);
+  glNormal3fv(cubeCorner[0]);
   glVertex3fv(cubeCorner[0]);
 
   glColor3f(0.0, 1.0, 0.0);   // green
+  glNormal3fv(cubeCorner[2]);
   glVertex3fv(cubeCorner[2]);
+  glNormal3fv(cubeCorner[6]);
   glVertex3fv(cubeCorner[6]);
+  glNormal3fv(cubeCorner[5]);
   glVertex3fv(cubeCorner[5]);
+  glNormal3fv(cubeCorner[1]);
   glVertex3fv(cubeCorner[1]);
   glEnd();
 

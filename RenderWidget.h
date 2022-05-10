@@ -1,10 +1,10 @@
 //
-// copyright 2018 Palestine Polytechnic Univeristy
+// Copyright 2022 Palestine Polytechnic Univeristy
 //
-// This software can be used and/or modified for academich use as long as 
+// This software can be used and/or modified for academic use as long as 
 // this commented part is listed
 //
-// Last modified by: Zein Salah, on 26.02.2022
+// Last modified by: Zein Salah, on 10.05.2022
 //
 
 
@@ -36,6 +36,7 @@ protected:
   void resizeGL(int w, int h) override;
   void paintGL() override;
 
+  void normalize(GLfloat vec[3]);
   void drawCube(void);
 
   typedef struct
