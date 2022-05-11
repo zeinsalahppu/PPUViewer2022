@@ -113,7 +113,7 @@ void RenderWidget::zoomOut()
 
 void RenderWidget::rotateAboutY()
 {
-  double angle = 5.0 / 180 * M_PI;
+  double angle = 3.0 / 180 * M_PI;
 
   std::cout << "Rotating about Y by " << angle << "\n";
 
