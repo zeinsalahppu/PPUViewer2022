@@ -4,13 +4,9 @@ project(PPUViewer)
 
 INCLUDE_DIRECTORIES (
    D:/Develope/Libs/Glut/include
-
 )
 
-find_package(Qt5Widgets)
-find_package(Qt5Core)
-find_package(Qt5Gui)
-find_package(Qt5OpenGL)
+find_package(Qt6 COMPONENTS Core Gui Widgets OpenGL OpenGLWidgets REQUIRED)
 
 find_package(OpenGL)
 
@@ -32,8 +28,6 @@ LINK_LIBRARIES(
    ${OPENGL_LIBRARY}
 )
 
-
 add_executable(PPUViewer ${PPUViewer_SRCS})
 
-qt5_use_modules(PPUViewer Widgets OpenGL)
-target_link_libraries(PPUViewer ${QT_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries(PPUViewer PRIVATE Qt::Core Qt::Widgets Qt::OpenGL Qt::OpenGLWidgets ${OPENGL_LIBRARIES})
